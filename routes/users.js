@@ -1,27 +1,29 @@
 const usersRouter = require('express').Router();
-const users = require('../data/users.json');
+const path = require('path');
+const readJson = require('./utils/readJsonFromFile.js');
 
 // Запрос списка пользователей
 usersRouter.get('/users', (req, res) => {
-  res.send(users);
+  readJson(path.join(__dirname, '..', 'data', 'users.json'))
+    .then((users) => {
+      res.send(users);
+    })
+    .catch((err) => {
+      res.status(500).send(err);
+    });
 });
 
 // Запрос информации о пользователе по id
-usersRouter.get('/users/:_id', (req, res) => {
-  const { _id } = req.params;
-
-  for (let i = 0; i < users.length; i += 1) {
-    for (let j = 0; j < users.length; j += 1) {
-      if (_id !== users[j]._id) {
-        res.status(404).send({ "message": "Нет пользователя с таким id"});
-        return;
+usersRouter.get('/users/:id', (req, res) => {
+  const { id } = req.params;
+  readJson(path.join(__dirname, '..', 'data', 'users.json'))
+    .then((users) => {
+      const userToFind = users.find((user) => user._id === id);
+      if (!userToFind) {
+        res.status(404).json({ "message": "Нет пользователя с таким id" });
       }
-    }
-    if (_id === users[i]._id) {
-      res.send(users[i]);
-      return;
-    }
-  }
+      res.send(userToFind);
+    });
 });
 
 module.exports = usersRouter;
