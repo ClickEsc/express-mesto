@@ -1,6 +1,6 @@
 const usersRouter = require('express').Router();
 const path = require('path');
-const readJson = require('./utils/readJsonFromFile.js');
+const readJson = require('../utils/readJsonFromFile.js');
 
 // Запрос списка пользователей
 usersRouter.get('/users', (req, res) => {
