@@ -9,7 +9,7 @@ usersRouter.get('/users', (req, res) => {
       res.send(users);
     })
     .catch((err) => {
-      res.status(500).send(err);
+      res.status(500).json(err);
     });
 });
 
@@ -20,9 +20,12 @@ usersRouter.get('/users/:id', (req, res) => {
     .then((users) => {
       const userToFind = users.find((user) => user._id === id);
       if (!userToFind) {
-        res.status(404).json({ "message": "Нет пользователя с таким id" });
+        res.status(404).json({ message: 'Нет пользователя с таким id' });
       }
       res.send(userToFind);
+    })
+    .catch((err) => {
+      res.status(500).json(err);
     });
 });
 

@@ -8,7 +8,7 @@ const { PORT = 3000 } = process.env;
 const app = express();
 
 // Доступ к публичным файлам
-app.use('/', express.static(__dirname + '/public'));
+app.use('/', express.static(`${__dirname}/public`));
 
 // Роутинг
 app.use('/', cardsRouter);
@@ -16,5 +16,6 @@ app.use('/', usersRouter);
 app.use('/', badRequestRouter);
 
 app.listen(PORT, () => {
+  // eslint-disable-next-line no-console
   console.log(`App listening on port ${PORT}`);
 });
