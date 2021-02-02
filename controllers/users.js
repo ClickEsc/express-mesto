@@ -12,13 +12,13 @@ module.exports.getUsers = (req, res) => {
       res.status(500).json(err);
     });
 };
-/*
+
 // Запрос информации о пользователе по id
 module.exports.getUserById = (req, res) => {
-  const { id } = req.params;
+  const { userId } = req.params;
   readJson(path.join(__dirname, '..', 'data', 'users.json'))
     .then((users) => {
-      const userToFind = users.find((user) => user._id === id);
+      const userToFind = users.find((user) => user._id === userId);
       if (!userToFind) {
         res.status(404).json({ message: 'Нет пользователя с таким id' });
       }
@@ -27,7 +27,7 @@ module.exports.getUserById = (req, res) => {
     .catch((err) => {
       res.status(500).json(err);
     });
-};*/
+};
 
 // Запрос на создание пользователя
 module.exports.createUser = (req, res) => {
@@ -35,5 +35,5 @@ module.exports.createUser = (req, res) => {
 
   User.create({ name, about, avatar })
     .then((user) => res.send({ data: user }))
-    .catch((err) => res.status(500).send({ message: `Произошла ошибка: ${err}` }));
+    .catch((err) => res.status(500).json({ message: `Произошла ошибка: ${err}` }));
 };
