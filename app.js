@@ -21,6 +21,15 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
 // Доступ к публичным файлам
 app.use('/', express.static(`${__dirname}/public`));
 
+// Мидлвэр для авторизации
+app.use((req, res, next) => {
+  req.user = {
+    _id: '60196aadeb5e4531602bd96d',
+  };
+
+  next();
+});
+
 // Роутинг
 app.use('/', cardsRouter);
 app.use('/', usersRouter);
