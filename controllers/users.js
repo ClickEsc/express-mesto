@@ -4,7 +4,7 @@ const User = require('../models/user');
 module.exports.getUsers = (req, res) => {
   User.find({})
     .then((users) => res.status(200).send(users))
-    .catch((err) => res.status(500).json({ message: `На сервере произошла ошибка: ${err}` }));
+    .catch((err) => res.status(500).json({ message: `На сервере произошла ошибка: ${err.message}` }));
 };
 
 // Запрос информации о пользователе по id
@@ -12,14 +12,13 @@ module.exports.getUserById = (req, res) => {
   const { userId } = req.params;
 
   User.findById(userId)
-    .then((user) => res.status(200).send({ data: user }))
-    .catch((err) => {
-      if (err.name === 'CastError') {
-        res.status(404).json({ message: 'Нет пользователя с таким id' });
-      } else {
-        res.status(500).json({ message: 'На сервере произошла ошибка' });
+    .then((user) => {
+      if (!user) {
+        res.status(400).json({ message: 'Нет пользователя с таким id' });
       }
-    });
+      res.status(200).send({ data: user });
+    })
+    .catch((err) => res.status(500).json({ message: `На сервере произошла ошибка: ${err.message}` }));
 };
 
 // Запрос на создание пользователя
@@ -30,9 +29,9 @@ module.exports.createUser = (req, res) => {
     .then((user) => res.status(200).send({ data: user }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(400).json({ message: 'Переданы некорректные данные' });
+        res.status(400).json({ message: `Переданы некорректные данные: ${err.message}` });
       } else {
-        res.status(500).json({ message: 'На сервере произошла ошибка' });
+        res.status(500).json({ message: `На сервере произошла ошибка: ${err.message}` });
       }
     });
 };
@@ -48,12 +47,17 @@ module.exports.updateProfileInfo = (req, res) => {
       new: true,
     },
   )
-    .then((user) => res.status(200).send({ data: user }))
+    .then((user) => {
+      if (!user) {
+        res.status(400).json({ message: 'Нет пользователя с таким id' });
+      }
+      res.status(200).send({ data: user });
+    })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(400).json({ message: 'Переданы некорректные данные' });
+        res.status(400).json({ message: `Переданы некорректные данные: ${err.message}` });
       } else {
-        res.status(500).json({ message: 'На сервере произошла ошибка' });
+        res.status(500).json({ message: `На сервере произошла ошибка: ${err.message}` });
       }
     });
 };
@@ -70,12 +74,17 @@ module.exports.updateAvatar = (req, res) => {
       runValidators: true,
     },
   )
-    .then((user) => res.status(200).send({ data: user }))
+    .then((user) => {
+      if (!user) {
+        res.status(400).json({ message: 'Нет пользователя с таким id' });
+      }
+      res.status(200).send({ data: user });
+    })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(400).json({ message: 'Переданы некорректные данные' });
+        res.status(400).json({ message: `Переданы некорректные данные: ${err.message}` });
       } else {
-        res.status(500).json({ message: 'На сервере произошла ошибка' });
+        res.status(500).json({ message: `На сервере произошла ошибка: ${err.message}` });
       }
     });
 };
