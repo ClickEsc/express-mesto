@@ -18,9 +18,6 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
   useFindAndModify: false,
 });
 
-// Доступ к публичным файлам
-app.use('/', express.static(`${__dirname}/public`));
-
 // Мидлвэр для авторизации
 app.use((req, res, next) => {
   req.user = {
