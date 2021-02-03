@@ -14,7 +14,7 @@ module.exports.getUserById = (req, res) => {
   User.findById(userId)
     .then((user) => {
       if (!user) {
-        res.status(400).json({ message: 'Нет пользователя с таким id' });
+        res.status(404).json({ message: 'Нет пользователя с таким id' });
       } else {
         res.status(200).send({ data: user });
       }
@@ -56,7 +56,7 @@ module.exports.updateProfileInfo = (req, res) => {
   )
     .then((user) => {
       if (!user) {
-        res.status(400).json({ message: 'Нет пользователя с таким id' });
+        res.status(404).json({ message: 'Нет пользователя с таким id' });
       } else {
         res.status(200).send({ data: user });
       }
@@ -64,8 +64,7 @@ module.exports.updateProfileInfo = (req, res) => {
     .catch((err) => {
       if (err.name === 'CastError') {
         res.status(400).json({ message: `Нет пользователя с таким id: ${err.message}` });
-      }
-      if (err.name === 'ValidationError') {
+      } else if (err.name === 'ValidationError') {
         res.status(400).json({ message: `Переданы некорректные данные: ${err.message}` });
       } else {
         res.status(500).json({ message: `На сервере произошла ошибка: ${err.message}` });
@@ -87,7 +86,7 @@ module.exports.updateAvatar = (req, res) => {
   )
     .then((user) => {
       if (!user) {
-        res.status(400).json({ message: 'Нет пользователя с таким id' });
+        res.status(404).json({ message: 'Нет пользователя с таким id' });
       } else {
         res.status(200).send({ data: user });
       }
@@ -95,8 +94,7 @@ module.exports.updateAvatar = (req, res) => {
     .catch((err) => {
       if (err.name === 'CastError') {
         res.status(400).json({ message: `Нет пользователя с таким id: ${err.message}` });
-      }
-      if (err.name === 'ValidationError') {
+      } else if (err.name === 'ValidationError') {
         res.status(400).json({ message: `Переданы некорректные данные: ${err.message}` });
       } else {
         res.status(500).json({ message: `На сервере произошла ошибка: ${err.message}` });
