@@ -15,10 +15,17 @@ module.exports.getUserById = (req, res) => {
     .then((user) => {
       if (!user) {
         res.status(400).json({ message: 'Нет пользователя с таким id' });
+      } else {
+        res.status(200).send({ data: user });
       }
-      res.status(200).send({ data: user });
     })
-    .catch((err) => res.status(500).json({ message: `На сервере произошла ошибка: ${err.message}` }));
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        res.status(400).json({ message: `Нет пользователя с таким id: ${err.message}` });
+      } else {
+        res.status(500).json({ message: `На сервере произошла ошибка: ${err.message}` });
+      }
+    });
 };
 
 // Запрос на создание пользователя
@@ -50,10 +57,14 @@ module.exports.updateProfileInfo = (req, res) => {
     .then((user) => {
       if (!user) {
         res.status(400).json({ message: 'Нет пользователя с таким id' });
+      } else {
+        res.status(200).send({ data: user });
       }
-      res.status(200).send({ data: user });
     })
     .catch((err) => {
+      if (err.name === 'CastError') {
+        res.status(400).json({ message: `Нет пользователя с таким id: ${err.message}` });
+      }
       if (err.name === 'ValidationError') {
         res.status(400).json({ message: `Переданы некорректные данные: ${err.message}` });
       } else {
@@ -77,10 +88,14 @@ module.exports.updateAvatar = (req, res) => {
     .then((user) => {
       if (!user) {
         res.status(400).json({ message: 'Нет пользователя с таким id' });
+      } else {
+        res.status(200).send({ data: user });
       }
-      res.status(200).send({ data: user });
     })
     .catch((err) => {
+      if (err.name === 'CastError') {
+        res.status(400).json({ message: `Нет пользователя с таким id: ${err.message}` });
+      }
       if (err.name === 'ValidationError') {
         res.status(400).json({ message: `Переданы некорректные данные: ${err.message}` });
       } else {
