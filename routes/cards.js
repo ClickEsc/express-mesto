@@ -1,15 +1,13 @@
 const cardsRouter = require('express').Router();
-const path = require('path');
-const readJson = require('../utils/readJsonFromFile.js');
+const { getCards, createCard, deleteCard } = require('../controllers/cards');
 
-cardsRouter.get('/cards', (req, res) => {
-  readJson(path.join(__dirname, '..', 'data', 'cards.json'))
-    .then((cards) => {
-      res.send(cards);
-    })
-    .catch((err) => {
-      res.status(500).json(err);
-    });
-});
+// Запрос списка карточек
+cardsRouter.get('/cards', getCards);
+
+// Запрос на создание карточки
+cardsRouter.post('/cards', createCard);
+
+// Запрос на создание карточки
+cardsRouter.delete('/cards/:cardId', deleteCard);
 
 module.exports = cardsRouter;
